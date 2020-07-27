@@ -1,6 +1,13 @@
 let origBoard; // The tic-tac-toe board
 const humanPlayer = 'O';
 const aiPlayer = 'X';
+const difficulty = {
+	// Difficulty levels
+	easy   : true,
+	medium : false,
+	hard   : false
+};
+let isMedium = true; // One time use var
 let gameAlreadyWon = false;
 const winCombos = [
 	// The list of winning combos
@@ -22,6 +29,7 @@ startGame();
 // Marks each cells value values from 0-9 and add an onClick eventListner to them
 function startGame () {
 	gameAlreadyWon = false;
+	if (difficulty.medium) isMedium = true;
 	document.querySelector('.endgame').style.display = 'none';
 	origBoard = Array.from(Array(9).keys());
 	for (let i = 0; i < cells.length; i++) {
@@ -31,11 +39,45 @@ function startGame () {
 	}
 }
 
+// Changes the difficulty level of the game
+function changeDifficulty (diff) {
+	if (diff.classList[1] === 'easy') {
+		difficulty.easy = true;
+		difficulty.medium = false;
+		difficulty.hard = false;
+		if (!document.querySelector('.easyActive')) diff.classList.add('easyActive');
+		if (document.querySelector('.mediumActive'))
+			document.querySelector('.mediumActive').classList.remove('mediumActive');
+		if (document.querySelector('.hardActive')) document.querySelector('.hardActive').classList.remove('hardActive');
+		startGame();
+	} else if (diff.classList[1] === 'medium') {
+		difficulty.medium = true;
+		difficulty.easy = false;
+		difficulty.hard = false;
+		if (!document.querySelector('.mediumActive')) diff.classList.add('mediumActive');
+		if (document.querySelector('.easyActive')) document.querySelector('.easyActive').classList.remove('easyActive');
+		if (document.querySelector('.hardActive')) document.querySelector('.hardActive').classList.remove('hardActive');
+		startGame();
+	} else if (diff.classList[1] === 'hard') {
+		difficulty.hard = true;
+		difficulty.medium = false;
+		difficulty.easy = false;
+		if (!document.querySelector('.hardActive')) diff.classList.add('hardActive');
+		if (document.querySelector('.easyActive')) document.querySelector('.easyActive').classList.remove('easyActive');
+		if (document.querySelector('.mediumActive'))
+			document.querySelector('.mediumActive').classList.remove('mediumActive');
+		startGame();
+	}
+}
+
 // Executes the turns of humanPlayer and aiPlayer
 function turnClick (e) {
 	if (typeof origBoard[e.target.id] === 'number') {
 		turn(e.target.id, humanPlayer);
-		if (!checkTie()) turn(bestSpot(), aiPlayer);
+		if (difficulty.easy && !checkTie()) turn(randomSpot(), aiPlayer);
+		else if (difficulty.medium && isMedium && !checkTie()) turn(randomSpot(), aiPlayer);
+		else if (difficulty.medium && !isMedium && !checkTie()) turn(bestSpot(), aiPlayer);
+		else if (difficulty.hard && !checkTie()) turn(bestSpot(), aiPlayer);
 	}
 }
 
@@ -81,7 +123,7 @@ function declareWinner (winner) {
 	document.querySelector('.text').innerText = winner;
 }
 
-// Get the wmpty squares on the board
+// Get the empty squares on the board
 function emptySquares () {
 	return origBoard.filter((s) => typeof s === 'number');
 }
@@ -89,6 +131,20 @@ function emptySquares () {
 // Gets the best spot based on the min-max function for the ai player
 function bestSpot () {
 	return minimax(origBoard, aiPlayer).index; // Function in AI.js file
+}
+
+// For choosing the random index based on the difficulty settings
+function randomSpot () {
+	if (difficulty.easy) return randomIndex();
+	else if (difficulty.medium) {
+		isMedium = false;
+		return randomIndex();
+	}
+}
+
+// For generating a random index based on the qmpty squares
+function randomIndex () {
+	return emptySquares()[Math.floor(Math.random() * emptySquares().length)];
 }
 
 // Check for tie

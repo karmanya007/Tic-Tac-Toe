@@ -65,8 +65,8 @@ table tr td:last-child {
 	display: inline-block;
 	position: absolute;
 	top: 93%;
-	left: 50%;
-	transform: translate(-50%);
+	left: 0%;
+	transform: translate(50%);
 	padding: 0.75rem 1rem;
 	border: none;
 	border-radius: 0.317rem;
@@ -81,15 +81,73 @@ table tr td:last-child {
 	-webkit-font-smoothing: antialiased;
 }
 
+.difficulty {
+	width: 120px;
+	display: inline-block;
+	position: absolute;
+	top: 93%;
+	padding: 0.75rem 1rem;
+	border: none;
+	border-radius: 0.317rem;
+	background-color: #aaa;
+	color: #fff;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 1rem;
+	line-height: 1.5;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-webkit-font-smoothing: antialiased;
+}
+
+.easy {
+	left: 50%;
+	transform: translate(50%);
+}
+.easy:hover {
+	color: black;
+	background-color: rgb(130, 255, 130);
+}
+.easyActive {
+	color: black;
+	background-color: rgb(130, 255, 130);
+}
+
+.medium {
+	right: 25%;
+	transform: translate(50%);
+}
+.medium:hover {
+	color: black;
+	background-color: rgb(115, 255, 236);
+}
+.mediumActive {
+	color: black;
+	background-color: rgb(115, 255, 236);
+}
+
+.hard {
+	right: 0;
+	transform: translate(-50%);
+}
+.hard:hover {
+	color: black;
+	background-color: rgb(250, 96, 96);
+}
+.hardActive {
+	color: black;
+	background-color: rgb(250, 96, 96);
+}
+
 button:hover {
+	color: black;
 	opacity: 0.85;
 }
 button:active {
-	outline: none;
 	box-shadow: inset 0 3px 4px hsla(0, 0%, 0%, 0.5);
 }
 button:focus {
-	outline: thin dotted #444;
+	outline: thin dotted rgb(255, 255, 255);
 	outline: 5px auto -webkit-focus-ring-color;
 	outline-offset: -2px;
 }
